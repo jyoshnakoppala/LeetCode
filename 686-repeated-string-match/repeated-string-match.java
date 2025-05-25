@@ -1,59 +1,52 @@
 class Solution {
     public int repeatedStringMatch(String a, String b) {
-         StringBuilder sb = new StringBuilder(a);
-        int count = 1;
+             int count = 1;
+        StringBuilder temp = new StringBuilder(a);
 
-        while (sb.length() < b.length()) {
-            sb.append(a);
+        // Repeat 'a' until length of temp is at least that of b
+        while (temp.length() < b.length()) {
+            temp.append(a);
             count++;
         }
 
-        if (kmpSearch(sb.toString(), b)) return count;
+        // Check using Rabin-Karp
+        if (containsRabinKarp(temp.toString(), b)) return count;
 
-        sb.append(a);
-        if (kmpSearch(sb.toString(), b)) return count + 1;
+        // Try one more append in case b spans across boundaries
+        temp.append(a);
+        if (containsRabinKarp(temp.toString(), b)) return count + 1;
 
         return -1;
     }
 
-    // KMP search function
-    private boolean kmpSearch(String text, String pattern) {
-        int[] lps = buildLPS(pattern);
-        int i = 0, j = 0;
+    private boolean containsRabinKarp(String text, String pattern) {
+        int base = 256;
+        int mod = 1000000007;
+        int n = text.length(), m = pattern.length();
+        if (m > n) return false;
 
-        while (i < text.length()) {
-            if (text.charAt(i) == pattern.charAt(j)) {
-                i++;
-                j++;
-                if (j == pattern.length()) return true;
-            } else {
-                if (j > 0) {
-                    j = lps[j - 1];
-                } else {
-                    i++;
-                }
+        long power = 1;
+        for (int i = 0; i < m - 1; i++) {
+            power = (power * base) % mod;
+        }
+
+        long patternHash = 0, textHash = 0;
+        for (int i = 0; i < m; i++) {
+            patternHash = (patternHash * base + pattern.charAt(i)) % mod;
+            textHash = (textHash * base + text.charAt(i)) % mod;
+        }
+
+        for (int i = 0; i <= n - m; i++) {
+            if (patternHash == textHash) {
+                if (text.substring(i, i + m).equals(pattern)) return true;
+            }
+            if (i < n - m) {
+                textHash = (textHash - text.charAt(i) * power % mod + mod) % mod;
+                textHash = (textHash * base + text.charAt(i + m)) % mod;
             }
         }
+
         return false;
-    }
 
-    // Build LPS (Longest Prefix Suffix) array
-    private int[] buildLPS(String pattern) {
-        int[] lps = new int[pattern.length()];
-        int len = 0, i = 1;
-
-        while (i < pattern.length()) {
-            if (pattern.charAt(i) == pattern.charAt(len)) {
-                len++;
-                lps[i++] = len;
-            } else {
-                if (len > 0) {
-                    len = lps[len - 1];
-                } else {
-                    lps[i++] = 0;
-                }
-            }
-        }
-        return lps;
     }
 }
