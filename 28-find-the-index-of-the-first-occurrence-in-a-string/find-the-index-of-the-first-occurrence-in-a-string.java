@@ -1,42 +1,28 @@
 class Solution {
     public int strStr(String haystack, String needle) {
-       if (needle.length() == 0) return 0;
-
-        // Combine pattern + '#' + text
-        String combined = needle + "#" + haystack;
-        int[] z = computeZArray(combined);
-        int m = needle.length();
-
-        // Look for full match of pattern in the Z-array
-        for (int i = m + 1; i < z.length; i++) {
-            if (z[i] == m) {
-                return i - m - 1; // subtract pattern and '#' lengths
-            }
-        }
-
-        return -1;
+      if(needle.length() == 0) return 0;  
+     String Combined = needle + "#" + haystack;
+      int[] lps=kmp(Combined);
+      int index=0;
+      for(int i=needle.length()+1;i<lps.length;i++)
+      {
+        if(lps[i]==needle.length())
+        return i-2*needle.length();
+      }
+      return -1;
     }
-
-    private int[] computeZArray(String s) {
-        int n = s.length();
-        int[] z = new int[n];
-        int l = 0, r = 0;
-
-        for (int i = 1; i < n; i++) {
-            if (i <= r) {
-                z[i] = Math.min(r - i + 1, z[i - l]);
+    public int[] kmp(String s)
+    {
+        int[] lps =new int[s.length()];
+        for(int i=1;i<s.length();i++)
+        {
+            int j=lps[i-1];
+            while(s.charAt(i)!=s.charAt(j) && j>0)
+            {
+                j=lps[j-1];
             }
-
-            while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i])) {
-                z[i]++;
-            }
-
-            if (i + z[i] - 1 > r) {
-                l = i;
-                r = i + z[i] - 1;
-            }
+            lps[i]=j+(s.charAt(i)==s.charAt(j)?1:0);
         }
-
-        return z;
+        return lps;
     }
 }
