@@ -8,13 +8,9 @@ class Solution {
         }
         for(char c:t.toCharArray())
         {
-            if(!map.containsKey(c)) return false;
-            if(map.containsKey(c))
-            {
-                if(map.get(c)==0)
+            if (!map.containsKey(c) || map.get(c) == 0)
                 return false;
-            }
-            map.put(c,map.get(c)-1);
+            map.put(c, map.get(c) - 1);
         }
         return true;
     }
