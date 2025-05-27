@@ -1,36 +1,31 @@
 class Solution {
     public int strStr(String haystack, String needle) {
-      int base = 256;
-      long mod= 1_000_000_007L;
-      int n=haystack.length();
-      int m=needle.length();
-      if(m>n)return -1;
-      long haystackhash=0, needlehash=0;
-      long factor=1;
-      for(int i=m-1;i>=0;i--)
-      {
-        haystackhash=(haystackhash+haystack.charAt(i)*factor%mod)%mod;
-        needlehash=(needlehash+needle.charAt(i)*factor%mod)%mod;
-        factor=(factor*base)%mod;
-      }  
-      long highpower=1;
-      for(int i=1;i<m;i++)
-      highpower=(highpower*base)%mod;
+      if(needle.length() == 0) return 0;  
+      StringBuilder nstring=new StringBuilder(needle);
+      StringBuilder hstring=new StringBuilder(haystack);
 
-      for(int i=0;i<=n-m;i++)
+      String Combined = nstring + "#" + hstring;
+      int[] lps=kmp(Combined);
+      int index=0;
+      for(int i=needle.length()+1;i<lps.length;i++)
       {
-        if(haystackhash==needlehash)
-        {
-            if (haystack.substring(i, i + m).equals(needle)) {
-            return i;
-            }
-        }
-        if(i<n-m)
-        {
-            haystackhash=(haystackhash-haystack.charAt(i)*highpower%mod+mod)%mod;
-            haystackhash=(haystackhash*base+haystack.charAt(i+m))%mod;
-        }
+        if(lps[i]==needle.length())
+        return i-2*needle.length();
       }
-    return -1;
+      return -1;
+    }
+    public int[] kmp(String s)
+    {
+        int[] lps =new int[s.length()];
+        for(int i=1;i<s.length();i++)
+        {
+            int j=lps[i-1];
+            while(s.charAt(i)!=s.charAt(j) && j>0)
+            {
+                j=lps[j-1];
+            }
+            lps[i]=j+(s.charAt(i)==s.charAt(j)?1:0);
+        }
+        return lps;
     }
 }
