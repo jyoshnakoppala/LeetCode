@@ -8,6 +8,6 @@ class Solution {
             else
             div+=i;      
               }
-              return notdiv-div;
+        return notdiv-div;
     }
 }
