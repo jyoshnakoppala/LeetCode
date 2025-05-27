@@ -1,10 +1,7 @@
 class Solution {
     public int strStr(String haystack, String needle) {
       if(needle.length() == 0) return 0;  
-      StringBuilder nstring=new StringBuilder(needle);
-      StringBuilder hstring=new StringBuilder(haystack);
-
-      String Combined = nstring + "#" + hstring;
+     String Combined = needle + "#" + haystack;
       int[] lps=kmp(Combined);
       int index=0;
       for(int i=needle.length()+1;i<lps.length;i++)
