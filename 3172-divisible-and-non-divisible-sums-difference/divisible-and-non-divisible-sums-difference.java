@@ -5,7 +5,7 @@ class Solution {
         {
             if(i%m!=0)
             notdiv+=i;
-            if(i%m==0)
+            else
             div+=i;      
               }
               return notdiv-div;
