@@ -1,11 +1,8 @@
 class Solution {
     public int[] maxTargetNodes(int[][] edges1, int[][] edges2, int k) {
         // Determine the actual number of nodes (not number of edges!)
-        int n = 0, m = 0;
-        for (int[] edge : edges1)
-            n = Math.max(n, Math.max(edge[0], edge[1]));
-        for (int[] edge : edges2)
-            m = Math.max(m, Math.max(edge[0], edge[1]));
+        int n = edges1.length; 
+        int m=edges2.length;
 
         List<Integer>[] tr1 = new ArrayList[n + 1];
         for (int i = 0; i <= n; i++) tr1[i] = new ArrayList<>();
