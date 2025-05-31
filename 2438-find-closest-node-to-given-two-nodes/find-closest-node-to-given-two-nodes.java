@@ -1,32 +1,36 @@
 class Solution {
     public int closestMeetingNode(int[] edges, int node1, int node2) {
-        HashMap<Integer, Integer> nodeonemap=new HashMap<>();
-        HashMap<Integer, Integer> nodetwomap=new HashMap<>();
-        computedistance(edges, node1, nodeonemap);
-        computedistance(edges, node2, nodetwomap);
-        int node=-1;
-        int dist=Integer.MAX_VALUE;
-        for(var entry : nodeonemap.entrySet())
-        {
-            int key=entry.getKey();
-            int nodeonevalue=entry.getValue();
-            int nodetwovalue=nodetwomap.getOrDefault(key, Integer.MAX_VALUE);
-            int maxdist=Math.max(nodeonevalue, nodetwovalue);
-            if(maxdist<dist || (maxdist==dist && key<node))
-            {
-                dist=maxdist;
-                node=key;
+         int n = edges.length;
+    int[] dist1 = getDistances(edges, node1);
+    int[] dist2 = getDistances(edges, node2);
+
+    int result = -1;
+    int minDist = Integer.MAX_VALUE;
+
+    for (int i = 0; i < n; i++) {
+        if (dist1[i] != -1 && dist2[i] != -1) {
+            int maxDist = Math.max(dist1[i], dist2[i]);
+            if (maxDist < minDist || (maxDist == minDist && i < result)) {
+                minDist = maxDist;
+                result = i;
             }
         }
-        return node;
     }
-    public void computedistance(int[] edges, int start, Map<Integer, Integer> map)
-    {
-        int distance=0;
-        while(start!=-1 && !map.containsKey(start))
-        {
-            map.put(start, distance++);
-            start=edges[start];
-        }
+
+    return result;
+}
+
+private int[] getDistances(int[] edges, int start) {
+    int n = edges.length;
+    int[] dist = new int[n];
+    Arrays.fill(dist, -1);
+    int current = start, d = 0;
+
+    while (current != -1 && dist[current] == -1) {
+        dist[current] = d++;
+        current = edges[current];
+    }
+
+    return dist;
     }
 }
