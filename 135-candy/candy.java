@@ -1,30 +1,39 @@
 class Solution {
     public int candy(int[] ratings) {
-       int n = ratings.length;
-        int[] left = new int[n];
+        int n = ratings.length;
+        int sum = 1; // First child gets 1 candy
+        int i = 1;
 
-        // Left to right pass
-        left[0] = 1;
-        for (int i = 1; i < n; i++) {
-            if (ratings[i] > ratings[i - 1]) {
-                left[i] = left[i - 1] + 1;
-            } else {
-                left[i] = 1;
+        while (i < n) {
+            if (ratings[i] == ratings[i - 1]) {
+                sum += 1;
+                i++;
+                continue;
             }
-        }
 
-        // Right to left pass using single variable
-        int cur = 1;
-        int sum = Math.max(left[n - 1], cur);  // Include last child's candy
-        for (int j = n - 2; j >= 0; j--) {
-            if (ratings[j] > ratings[j + 1]) {
-                cur += 1;
-            } else {
-                cur = 1;
+            // Count increasing slope
+            int peak = 1;
+            while (i < n && ratings[i] > ratings[i - 1]) {
+                peak++;
+                sum += peak;
+                i++;
             }
-            sum += Math.max(left[j], cur);
+
+            // Count decreasing slope
+            int down = 0;
+            while (i < n && ratings[i] < ratings[i - 1]) {
+                down++;
+                sum += down;
+                i++;
+            }
+
+            // Fix overlap at peak if down > peak
+            if (down >= peak) {
+                sum += (down - peak + 1);
+            }
         }
 
         return sum;
+
     }
 }
