@@ -10,8 +10,7 @@ class StockSpanner {
     public int next(int price) {
         if(st.isEmpty())
         {
-            st.push(new Pair<>(price, i));
-            i++;
+            st.push(new Pair<>(price, i++));
             return 1;
         }
         
@@ -22,8 +21,7 @@ class StockSpanner {
             int top = st.isEmpty()?-1:st.peek().getValue();
             int span = i-top;
 
-            st.push(new Pair<>(price, i));
-            i++;
+            st.push(new Pair<>(price, i++));
             return span;
     
     }
