@@ -38,9 +38,6 @@ class Solution {
             if(p.node.right!=null)
             q.add(new Node(p.node.right, p.level+1));
         }
-        List<List<Integer>> res=new ArrayList<>();
-        for(List<Integer> val:map.values())
-        res.add(val);
-        return res;
+        return new ArrayList<>(map.values());
     }
 }
