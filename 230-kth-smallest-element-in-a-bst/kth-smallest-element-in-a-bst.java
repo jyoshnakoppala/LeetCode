@@ -14,25 +14,25 @@
  * }
  */
 class Solution {
-    int count = 0; 
+    private int count = 0;
+    private int result = -1;
 
     public int kthSmallest(TreeNode root, int k) {
-        int[] ans = new int[1];
-        findans(root, k, ans);
-        return ans[0];
+        inorder(root, k);
+        return result;
     }
 
-    private void findans(TreeNode root, int k, int[] ans) {
-        if (root == null) return;
+    private void inorder(TreeNode node, int k) {
+        if (node == null || count >= k) return;
 
-        findans(root.left, k, ans);
+        inorder(node.left, k);
 
         count++;
         if (count == k) {
-            ans[0] = root.val;
+            result = node.val;
             return;
         }
 
-        findans(root.right, k, ans);
+        inorder(node.right, k);
 }
 }
