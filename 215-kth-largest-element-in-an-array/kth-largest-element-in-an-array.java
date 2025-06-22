@@ -1,15 +1,19 @@
 class Solution {
     public int findKthLargest(int[] nums, int k) {
-        int ans=0;
-        Queue<Integer> minheap=new PriorityQueue<>();
-        for(int i=0;i<nums.length;i++)
-        {
-            minheap.offer(nums[i]);
-            if(minheap.size()>k)
-            {
-                minheap.poll();
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for (int i = 0; i < k; i++) {
+            minHeap.offer(nums[i]);
+        }
+
+        // Compare the rest of the elements with the heap's root
+        for (int i = k; i < nums.length; i++) {
+            if (nums[i] > minHeap.peek()) {
+                minHeap.poll();
+                minHeap.offer(nums[i]);
             }
         }
-        return minheap.peek();
+
+        // The root is the kth largest element
+        return minHeap.peek();
     }
 }
