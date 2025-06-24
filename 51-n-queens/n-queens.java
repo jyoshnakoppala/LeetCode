@@ -1,65 +1,55 @@
+import java.util.*;
+
 class Solution {
-     public boolean isSafe(int row, int col, List<String> board, int n) {
-        int dupRow = row;
-        int dupCol = col;
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> ans = new ArrayList<>();
+        char[][] board = new char[n][n];
 
-        // Check upper diagonal (top-left)
-        while (row >= 0 && col >= 0) {
-            if (board.get(row).charAt(col) == 'Q') return false;
-            row--;
-            col--;
+        // Initialize board with '.'
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(board[i], '.');
         }
 
-        // Check left row
-        col = dupCol;
-        row = dupRow;
-        while (col >= 0) {
-            if (board.get(row).charAt(col) == 'Q') return false;
-            col--;
-        }
+        int[] leftRow = new int[n];
+        int[] upperDiagonal = new int[2 * n - 1];
+        int[] lowerDiagonal = new int[2 * n - 1];
 
-        // Check lower diagonal (bottom-left)
-        row = dupRow;
-        col = dupCol;
-        while (row < n && col >= 0) {
-            if (board.get(row).charAt(col) == 'Q') return false;
-            row++;
-            col--;
-        }
-
-        return true;
+        solve(0, board, ans, leftRow, upperDiagonal, lowerDiagonal, n);
+        return ans;
     }
 
-    public void solve(int col, List<String> board, List<List<String>> ans, int n) {
+    private void solve(int col, char[][] board, List<List<String>> ans,
+                       int[] leftRow, int[] upperDiagonal, int[] lowerDiagonal, int n) {
         if (col == n) {
-            ans.add(new ArrayList<>(board));
+            // Convert board to List<String> and add to ans
+            List<String> res = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                res.add(new String(board[i]));
+            }
+            ans.add(res);
             return;
         }
 
         for (int row = 0; row < n; row++) {
-            if (isSafe(row, col, board, n)) {
-                char[] rowChars = board.get(row).toCharArray();
-                rowChars[col] = 'Q';
-                board.set(row, new String(rowChars));
+            if (leftRow[row] == 0 &&
+                lowerDiagonal[row + col] == 0 &&
+                upperDiagonal[n - 1 + col - row] == 0) {
 
-                solve(col + 1, board, ans, n);
+                // Place the queen
+                board[row][col] = 'Q';
+                leftRow[row] = 1;
+                lowerDiagonal[row + col] = 1;
+                upperDiagonal[n - 1 + col - row] = 1;
 
-                rowChars[col] = '.';
-                board.set(row, new String(rowChars));
+                // Recurse
+                solve(col + 1, board, ans, leftRow, upperDiagonal, lowerDiagonal, n);
+
+                // Backtrack
+                board[row][col] = '.';
+                leftRow[row] = 0;
+                lowerDiagonal[row + col] = 0;
+                upperDiagonal[n - 1 + col - row] = 0;
             }
         }
-    }
-
-    public List<List<String>> solveNQueens(int n) {
-        List<List<String>> ans = new ArrayList<>();
-        List<String> board = new ArrayList<>();
-        String s = ".".repeat(n);
-
-        for (int i = 0; i < n; i++) {
-            board.add(s);
-        }
-
-        solve(0, board, ans, n);
-        return ans;
     }
 }
