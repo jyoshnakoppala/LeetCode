@@ -4,12 +4,16 @@ class KthLargest {
     public KthLargest(int k, int[] nums) {
         this.k=k;
         minheap=new PriorityQueue<Integer>();
-        for(int i=0; i<nums.length;i++)
+        for(int i=0; i<nums.length && i< k;i++)
         {
              minheap.add(nums[i]);
-            if(minheap.size()>k)
+        }
+        for(int i=k;i<nums.length;i++)
+        {
+            if(nums[i]>minheap.peek())
             {
                 minheap.poll();
+                minheap.add(nums[i]);
             }
         }
     }
