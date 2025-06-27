@@ -1,42 +1,35 @@
 class Solution {
-    public boolean canFinish(int numCourses, int[][] prerequisites) {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {//using dfs
        List<List<Integer>> adj=new ArrayList<>();
        for(int i=0;i<numCourses;i++)
        {
         adj.add(new ArrayList<>());
        }
+       int[] indegree=new int[numCourses];
        for(int[] preq:prerequisites)
        {
         adj.get(preq[1]).add(preq[0]);
+        indegree[preq[0]]++;
        }
-       int[] visited=new int[numCourses];
-       int[] path=new int[numCourses];
-
+       Queue<Integer> q=new LinkedList<>();
        for(int i=0;i<numCourses;i++)
        {
-        if(visited[i]==0)
+        if(indegree[i]==0)
+        q.add(i);
+       }
+       int count=0;
+       while(!q.isEmpty())
+       {
+        int node=q.poll();
+        count++;
+
+        for(int n:adj.get(node))
         {
-        if(dfs(i, adj, path, visited))
-        return false;
+            indegree[n]--;
+            if(indegree[n]==0)
+            q.add(n);
         }
        }
-       return true;
-    }
-    private boolean dfs(int node, List<List<Integer>> adj, int[] path, int[] visited)
-    {
-        visited[node]=1;
-        path[node]=1;
-        for(int a:adj.get(node))
-        {
-            if(visited[a]==0)
-            {
-            if(dfs(a, adj,path, visited)==true)
-            return true;
-            }
-            else if(path[a]==1)
-            return true;
-        }
-        path[node]=0;
-        return false;
+       return count==numCourses;
     }
 }
