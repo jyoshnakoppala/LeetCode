@@ -1,17 +1,4 @@
 class Solution {
-    private boolean findans(int i, int[] nums, int target, int[][] dp)
-    {
-        if(target==0) return true;
-        if(i==0)
-        return nums[0]==target;
-        if(dp[i][target]!=-1) return dp[i][target]==1;
-        boolean nottake=findans(i-1, nums, target, dp);
-        boolean take =false;
-        if(target>=nums[i])
-        take=findans(i-1, nums, target-nums[i], dp);
-        dp[i][target] = (take || nottake) ? 1 : 0;
-        return take || nottake;
-    }
     public boolean canPartition(int[] nums) {
         int totalsum=0;
         int n=nums.length;
@@ -23,11 +10,27 @@ class Solution {
         return false;
 
         int target=totalsum/2;
-        int[][] dp=new int[n][target+1];
+        boolean[][] dp=new boolean[n][target+1];
+        
         for(int i=0;i<n;i++)
         {
-            Arrays.fill(dp[i],-1);
+        Arrays.fill(dp[i],false);
+        dp[i][0]=true;
         }
-        return findans(n-1, nums, target, dp);
+        if (nums[0] <= target)
+        dp[0][nums[0]]=true;
+        
+        for(int i=1;i<n;i++)
+        {
+            for(int j=1;j<=target;j++)
+            {
+                boolean nottake=dp[i-1][j];
+                boolean take =false;
+                if(j>=nums[i])
+                take=dp[i-1][j-nums[i]];
+                dp[i][j] = take || nottake;
+            }
+        }
+        return dp[n-1][target];
     }
 }
