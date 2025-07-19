@@ -28,9 +28,23 @@ class Solution {
 
         int[][] dp=new int[c+2][c+2];
 
-        for (int[] row : dp)
-        Arrays.fill(row, -1);
+        for(int i=n;i>=1;i--)
+        {
+            for(int j=1;j<=c;j++)
+            {
+                if(i>j) continue;
+                int minCost=Integer.MAX_VALUE;
+                for(int ind=i;ind<=j;ind++)
+                 {
+                     int cost = cutlist.get(j + 1) - cutlist.get(i - 1)
+                     + findans(i, ind - 1, cutlist, dp)
+                     + findans(ind + 1, j, cutlist, dp);
+                     minCost = Math.min(minCost, cost);
 
-        return findans(1, c, cutlist, dp);
-    }
+                     dp[i][j]=minCost;
+                  }
+            }
+         }
+         return dp[1][c];
+}
 }
