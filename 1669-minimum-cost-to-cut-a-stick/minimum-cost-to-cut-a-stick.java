@@ -1,20 +1,4 @@
 class Solution {
-    private int findans(int i, int j, ArrayList<Integer> cutlist, int[][] dp)
-    {
-        if(i>j) return 0;
-
-        if (dp[i][j] != -1) return dp[i][j];
-
-        int minCost=Integer.MAX_VALUE;
-        for(int ind=i;ind<=j;ind++)
-        {
-            int cost = cutlist.get(j + 1) - cutlist.get(i - 1)
-                     + findans(i, ind - 1, cutlist, dp)
-                     + findans(ind + 1, j, cutlist, dp);
-            minCost = Math.min(minCost, cost);
-        }
-        return dp[i][j] = minCost;
-    }
     public int minCost(int n, int[] cuts) {
         ArrayList<Integer> cutlist=new ArrayList<>();
         for(int cut: cuts)
@@ -37,8 +21,8 @@ class Solution {
                 for(int ind=i;ind<=j;ind++)
                  {
                      int cost = cutlist.get(j + 1) - cutlist.get(i - 1)
-                     + findans(i, ind - 1, cutlist, dp)
-                     + findans(ind + 1, j, cutlist, dp);
+                     + dp[i][ind-1]
+                     + dp[ind+1][j];
                      minCost = Math.min(minCost, cost);
 
                      dp[i][j]=minCost;
