@@ -21,7 +21,7 @@ class Solution {
         Arrays.sort(nums);
         int count=0;
         int n=nums.length;
-        int low=1;
+        int low=0;
         int high=nums.length;
         while(low<=high)
         {
