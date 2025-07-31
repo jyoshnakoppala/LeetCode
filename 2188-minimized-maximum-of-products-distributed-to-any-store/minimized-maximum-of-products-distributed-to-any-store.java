@@ -6,7 +6,7 @@ class Solution {
         while(low<=high)
         {
             int mid=(low+high)/2;
-            if(ifPossible(mid, n, quantities))
+            if(isPossible(mid, n, quantities))
             {
                 res=mid;
                 high=mid-1;
@@ -16,7 +16,7 @@ class Solution {
         }
         return res;
     }
-    private boolean ifPossible(int maxperstore, int n, int[] quantities)
+    private boolean isPossible(int maxperstore, int n, int[] quantities)
     {
         int needperstore=0; 
         for(int q:quantities)
