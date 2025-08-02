@@ -10,6 +10,7 @@ class Solution {
             {
                 ans[0]=map.get(target-nums[i]);
                 ans[1]=i;
+                break;
             }
         }
         return ans;
