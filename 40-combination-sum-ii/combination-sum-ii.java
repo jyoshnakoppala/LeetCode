@@ -1,25 +1,25 @@
 class Solution {
+    List<List<Integer>> ans=new ArrayList<>();
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        List<List<Integer>> ans=new ArrayList<>();
         Arrays.sort(candidates);
-        findans(0, candidates, target, ans, new ArrayList<>());
+        findans(candidates, target, 0, new ArrayList<>());
         return ans;
     }
-    private void findans(int index, int[] nums, int target, List<List<Integer>> ans, List<Integer> res)
+    private void findans(int[] candidates, int target, int ind, List<Integer> ds)
     {
         if(target==0)
-         {
-             ans.add(new ArrayList<>(res));
-            return;
-         }
-        for(int i=index; i<nums.length;i++)
         {
-            if(i!=index && nums[i]==nums[i-1]) continue;
-            if(nums[i]> target) break;
+            ans.add(new ArrayList<>(ds));
+            return;
+        }
+        for(int i=ind;i<candidates.length;i++)
+        {
+            if(i>ind && candidates[i]==candidates[i-1]) continue;
+            if(candidates[i]>target) break;
 
-            res.add(nums[i]);
-            findans(i+1, nums, target-nums[i], ans, res);
-            res.remove(res.size()-1);
+            ds.add(candidates[i]);
+            findans(candidates, target-candidates[i], i+1, ds);
+            ds.remove(ds.size()-1);
         }
     }
 }
