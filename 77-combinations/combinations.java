@@ -11,7 +11,7 @@ class Solution {
             res.add(new ArrayList<>(ds));
             return;
         }
-        for(int i=ind;i<=n;i++)
+        for(int i = ind; i <= n - (k - ds.size())+1; i++)
         {
             ds.add(i);
             findans(i+1, n, k, ds);
