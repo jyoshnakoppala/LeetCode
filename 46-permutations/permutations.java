@@ -1,28 +1,32 @@
 class Solution {
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> ans=new ArrayList<>();
-        boolean[] unused=new boolean[nums.length];
-        List<Integer> path=new ArrayList<>();
-        findans(nums, ans, path, unused);
-        return ans;
+       List<List<Integer>> ans=new ArrayList<>();
+       findans(nums, 0, ans);
+       return ans; 
     }
-    private void findans(int[] n, List<List<Integer>> ans, List<Integer> path, boolean[] unused)
+    private void findans(int[] nums, int idx, List<List<Integer>> ans)
     {
-        if(path.size()==n.length)
+        if(idx==nums.length)
         {
-            ans.add(new ArrayList<>(path));
+            List<Integer> ds=new ArrayList<>();
+            for(int i=0;i<nums.length;i++)
+            {
+                ds.add(nums[i]);
+            }
+            ans.add(ds);
             return;
         }
-        for(int i=0;i<n.length;i++)
+        for(int i=idx;i<nums.length;i++)
         {
-            if(!unused[i])
-            {
-                unused[i]=true;
-                path.add(n[i]);
-                findans(n, ans, path, unused);
-                path.remove(path.size()-1);
-                unused[i]=false;
-            }
+            swap(idx, i, nums);
+            findans(nums, idx+1, ans);
+            swap(idx, i, nums);
         }
+    }
+    private void swap(int i, int j, int[] nums)
+    {
+        int t=nums[i];
+        nums[i]=nums[j];
+        nums[j]=t;
     }
 }
