@@ -1,28 +1,27 @@
 class Solution {
+    List<List<String>> res=new ArrayList<>();
     public List<List<String>> partition(String s) {
-        List<List<String>> ans=new ArrayList<>();
-        List<String> path=new ArrayList<>();
-        findans(0, s, path, ans);
-        return ans;
+        findans(0, s, new ArrayList<>());
+        return res;
     }
-    private void findans(int index, String s, List<String> path, List<List<String>> ans)
+    private void findans(int idx, String s, List<String> ds)
     {
-        if(index==s.length())
+        if(idx==s.length())
         {
-            ans.add(new ArrayList<>(path));
+            res.add(new ArrayList<>(ds));
             return;
         }
-        for(int i=index; i<s.length(); i++)
+        for(int i=idx;i<s.length();i++)
         {
-            if(ispalindrome(s, index, i))
+            if(ispalindrome(s, idx, i))
             {
-            path.add(s.substring(index, i+1));
-            findans(i+1, s, path, ans);
-            path.remove(path.size()-1);
+                ds.add(s.substring(idx, i+1));
+                findans(i+1, s, ds);
+                ds.remove(ds.size()-1);
             }
         }
     }
-    boolean ispalindrome(String s, int start, int end)
+    private boolean ispalindrome(String s, int start, int end)
     {
         while(start<=end)
         {
